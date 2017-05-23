@@ -16,15 +16,15 @@
 //    StroeModelUpdateTypeCreateTable,
 //    StroeModelUpdateTypeAddColumn
 //};
-
+@class FMDatabase;
 @interface StoreModel : NSObject
 
 @property (nonatomic,assign) int mid;//数据库中自增主键 0时代表是新数据
 
 + (NSString *)primaryKey;
 + (NSArray *)ignoredProperties;
-+ (void )selectObjectsWhere:(NSString *)where backArray:(void(^)(NSArray *))backArray;
-+ (void)allObjectsBackArray:(void(^)(NSArray *))backArray;
++ (void)selectObjectsWhere:(NSString *)where backArray:(void(^)(NSArray *,FMDatabase *,BOOL *))backArray FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
++ (void)allObjectsBackArray:(void(^)(NSArray *,FMDatabase *,BOOL *))backArray FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
 + (NSString *)tableName;
 - (id)primaryValue;
 

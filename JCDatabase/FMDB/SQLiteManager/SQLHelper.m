@@ -61,7 +61,13 @@
 
 // 清空表
 + (NSString *)truncateTableSQLWithModel:(StoreModel *)model {
-    return nil;
+    NSMutableString *mstr = [NSMutableString stringWithFormat:@"DELETE FROM %@",[[model class] tableName]];
+    return mstr;
+}
+
++ (NSString *)truncateTableSQLWithModelName:(NSString *)modelName{
+    NSMutableString *mstr = [NSMutableString stringWithFormat:@"DELETE FROM %@",modelName];
+    return mstr;
 }
 
 // 增加列

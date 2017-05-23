@@ -9,17 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "StoreModel.h"
 
+@class FMDatabase;
+
 @interface SQLiteManager : NSObject
 
 + (instancetype)shareManager;
 
-- (void)addTableWithObject:(StoreModel *)model;
-- (void)addColumnWithObject:(StoreModel *)model columnName:(NSString *)columnName columnType:(NSString *)columnType;
+- (void)addTableWithObject:(StoreModel *)model FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
+- (void)addColumnWithObject:(StoreModel *)model columnName:(NSString *)columnName columnType:(NSString *)columnType FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
 
-- (void)addObject:(StoreModel *)model;
-- (void)deleteObject:(StoreModel *)model;
-- (void)updateObject:(StoreModel *)model;
-- (void)updateObject:(StoreModel *)model byKeys:(NSArray *)arrKeys;
-- (void)selectObjectsByObjectName:(NSString *)objectName where:(NSString *)where backArray:(void(^)(NSArray *))backArray;
+- (void)addObject:(StoreModel *)model FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
+- (void)deleteObject:(StoreModel *)model FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
+- (void)updateObject:(StoreModel *)model FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
+- (void)updateObject:(StoreModel *)model byKeys:(NSArray *)arrKeys FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
+- (void)deleteAllName:(NSString *)modelName FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
+- (void)selectObjectsByObjectName:(NSString *)objectName where:(NSString *)where backArray:(void(^)(NSArray *,FMDatabase *,BOOL *))backArray FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack;
 
 @end

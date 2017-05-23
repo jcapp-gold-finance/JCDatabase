@@ -20,6 +20,8 @@
 
 // 清空表
 + (NSString *)truncateTableSQLWithModel:(StoreModel *)model;
+// 清空表
++ (NSString *)truncateTableSQLWithModelName:(NSString *)modelName;
 
 // 增加列
 + (NSString *)addColumnSQLWithModel:(StoreModel *)model columnName:(NSString *)columnName columnType:(NSString *)columnType;

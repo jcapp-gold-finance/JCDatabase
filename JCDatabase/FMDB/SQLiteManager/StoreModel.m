@@ -36,7 +36,7 @@ static NSMutableDictionary *mdicLocalProperties = nil;
         NSLog(@"类是新增的，开始建表");
         // 建表
         StoreModel *model = [[self alloc] init];
-        [[SQLiteManager shareManager] addTableWithObject:model];
+        [[SQLiteManager shareManager] addTableWithObject:model FMDatabase:nil rollBack:nil];
         
         // 建表成功 直接插入plist
         self.p_mdicLocalProperties[classStr] = @{
@@ -81,7 +81,7 @@ static NSMutableDictionary *mdicLocalProperties = nil;
                 // 更新数据库表结构，暂时只管新增列
                 StoreModel *model = [[self alloc] init];
                 [mdicAdd enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
-                    [[SQLiteManager shareManager] addColumnWithObject:model columnName:key columnType:value];
+                    [[SQLiteManager shareManager] addColumnWithObject:model columnName:key columnType:value FMDatabase:nil rollBack:nil];
                 }];
                 
                 // 更新plist
@@ -174,15 +174,15 @@ static NSMutableDictionary *mdicLocalProperties = nil;
     return NSStringFromClass([self class]);
 }
 
-+ (void)selectObjectsWhere:(NSString *)where backArray:(void(^)(NSArray *))backArray{
-    [[SQLiteManager shareManager] selectObjectsByObjectName:[self tableName] where:where backArray:^(NSArray *arr) {
-        backArray(arr);
-    }];
++ (void)selectObjectsWhere:(NSString *)where backArray:(void(^)(NSArray *,FMDatabase *,BOOL *))backArray FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack{
+    [[SQLiteManager shareManager] selectObjectsByObjectName:[self tableName] where:where backArray:^(NSArray *arr,FMDatabase *db,BOOL *rollBack){
+        backArray(arr,db,rollBack);
+    } FMDatabase:db rollBack:rollBack];
 }
-+ (void)allObjectsBackArray:(void(^)(NSArray *))backArray{
-    [[SQLiteManager shareManager] selectObjectsByObjectName:[self tableName] where:nil backArray:^(NSArray *arr) {
-        backArray(arr);
-    }];
++ (void)allObjectsBackArray:(void(^)(NSArray *,FMDatabase *,BOOL *))backArray FMDatabase:(FMDatabase *)db rollBack:(BOOL *)rollBack{
+    [[SQLiteManager shareManager] selectObjectsByObjectName:[self tableName] where:nil backArray:^(NSArray *arr,FMDatabase *db,BOOL *rollBack) {
+        backArray(arr,db,rollBack);
+    } FMDatabase:db rollBack:rollBack];
 }
 
 - (id)primaryValue{
